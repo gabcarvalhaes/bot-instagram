@@ -57,12 +57,16 @@ except NoSuchElementException as error:
 
 time.sleep(2)
 
-# * Busca o botão "Agora não" para avançar a página
+# * Busca o botão "Agora não" para Salvar Informações e avançar a página
 pass_button = browser.find_elements_by_tag_name('button')[1]
 pass_button.click()
 
-Printer.primary('Navegando para a página do sorteio...')
+Printer.primary('Aguarde...')
 time.sleep(2)
 
-# browser.get(page)
+# * Busca o botão "Agora não" para Notificação e avançar a página
+pass_button = browser.find_element_by_xpath('//div[@class="mt3GC"]/button[1]')
+pass_button.click()
+
+browser.get(page)
 
