@@ -1,6 +1,6 @@
 import time
 import os
-import math
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -17,7 +17,7 @@ EDGE_DRIVER = '/drivers/msedgedriver.exe' # * Driver do Microsoft Edge
 username = str(input('Login/Usuário do Instagram: '))
 password = str(getpass('Senha: '))
 
-page = str(input('Perfil do sorteador: '))
+profile = str(input('Perfil do sorteador: '))
 url = str(input('Página do sorteio: '))
 person_numbers = int(input('Número de pessoas a marcar por comentário: '))
 comment = str(input('Comentário: '))
@@ -54,6 +54,7 @@ try:
 
     if login_error:
         Printer.error(login_error.text)
+        sys.exit()
 
 # * Caso não tenha encontrado o erro, o login foi efetuado com sucesso!
 except NoSuchElementException as error:
@@ -75,19 +76,53 @@ pass_button.click()
 
 # * Realiza a leitura do arquivo TXT de usuários
 users_list = open(USERS_TXT, 'r').read().split()
+new_user_list = []
+
+for user in users_list:
+    if 'dix' not in user and 'oficial' not in user and 'official' not in user and user != profile:
+        new_user_list.append(user)
 
 index = 0
-new_users_list = [[] for x in range(int(len(users_list) / person_numbers))] # * Cria arrays vazios dentro de um array
+index2 = 0
+index3 = 0
+comments_list = ['' for x in range(int(len(new_user_list) / person_numbers))] # * Cria espaços vazios para os comentários dentro de um array
 
 # * Filtra e adiciona os usuários corretamente nesses arrays
-for user in users_list:
-    if 'dix' not in user and 'oficial' not in user and 'official' not in user:
-        username = '@' + str(user).strip()
-        new_users_list[index].append(username)
+while index < int(len(new_user_list) / person_numbers):
+    user = new_user_list[index]
 
-    if len(new_users_list[index]) == person_numbers:
-        index += 1
+    while index2 < person_numbers:
+        
+            comments_list[index] += '@' + new_user_list[index3 + index2] + ' '
 
-# todo: Realizar os comentários com as marcações nas publicações
-for users_to_comments in new_users_list:
-    pass
+            index2 += 1
+
+            if index2 >= person_numbers:
+                comments_list[index] += comment
+                index3 += person_numbers
+
+    index2 = 0
+    index += 1
+
+Printer.primary('Aguarde... abrindo página do sorteio')
+time.sleep(2)
+
+browser.get(url)
+
+time.sleep(2)
+Printer.primary('Aguarde... buscando campo de comentário')
+
+comments_list = [
+    '@m_esteves20 @brianathayde Teste do Bot',
+    '@alexandrel01 @_gabrielcarvalhaes Teste do Bot'
+]
+
+# * Realiza os comentários com as marcações nas publicações
+for comment in comments_list:
+    comment_field = browser.find_element_by_class_name('Ypffh')
+    comment_field.send_keys(comment)
+
+    time.sleep(2)
+
+    publicate_button = browser.find_element_by_xpath('//button[@type="submit"]')
+    publicate_button.submit()
