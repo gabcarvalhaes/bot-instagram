@@ -5,10 +5,12 @@ from selenium.common.exceptions import NoSuchElementException
 from printer import Printer
 from getpass import getpass
 
-import sqlite3
 import time
 import os
 
+INSTAGRAM_URL = 'https://www.instagram.com' # * Url padrão do Instagram
+USERS_TXT = 'src/users.txt' # * Arquivo txt de usuários
+EDGE_DRIVER = '/drivers/msedgedriver.exe' # * Driver do Microsoft Edge
 
 # * Solicita o usuário e senha
 username = str(input('Login/Usuário do Instagram: '))
@@ -16,16 +18,18 @@ password = str(getpass('Senha: '))
 
 page = str(input('Perfil do sorteador: '))
 url = str(input('Página do sorteio: '))
+person_numbers = int(input('Número de pessoas a marcar por comentário: '))
+comment = str(input('Comentário: '))
 
 Printer.primary('Aguarde... abrindo navegador.')
 time.sleep(2)
 
 # * Instanciar o drive do navegador
-driver = os.getcwd() + '/drivers/msedgedriver.exe'
+driver = os.getcwd() + EDGE_DRIVER
 browser = webdriver.Edge(driver)
 
 # * Abre a página do Instagram
-browser.get('https://www.instagram.com')
+browser.get(INSTAGRAM_URL)
 
 time.sleep(2)
 
@@ -68,5 +72,22 @@ time.sleep(2)
 pass_button = browser.find_element_by_xpath('//div[@class="mt3GC"]/button[1]')
 pass_button.click()
 
-browser.get(page)
+# * Realiza a leitura do arquivo TXT de usuários
+users_list = open(USERS_TXT, 'r').read().split()
 
+index = 0
+new_users_list = [[] for x in range(int(len(users_list) / person_numbers))] # * Cria arrays vazios dentro de um array
+
+# * Filtra e adiciona os usuários corretamente nesses arrays
+# todo: Verificar criação dos arrays vazios que estão sobrando
+for user in users_list:
+    if 'dix' not in user and 'oficial' not in user and 'official' not in user:
+        username = '@' + str(user).strip()
+        new_users_list[index].append(username)
+
+    if len(new_users_list[index]) == person_numbers:
+        index += 1
+
+# todo: Realizar os comentários com as marcações nas publicações
+for users_to_comments in new_users_list:
+    pass    
