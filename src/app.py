@@ -1,12 +1,13 @@
+import time
+import os
+import math
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
 from printer import Printer
 from getpass import getpass
-
-import time
-import os
 
 INSTAGRAM_URL = 'https://www.instagram.com' # * Url padrão do Instagram
 USERS_TXT = 'src/users.txt' # * Arquivo txt de usuários
@@ -79,7 +80,6 @@ index = 0
 new_users_list = [[] for x in range(int(len(users_list) / person_numbers))] # * Cria arrays vazios dentro de um array
 
 # * Filtra e adiciona os usuários corretamente nesses arrays
-# todo: Verificar criação dos arrays vazios que estão sobrando
 for user in users_list:
     if 'dix' not in user and 'oficial' not in user and 'official' not in user:
         username = '@' + str(user).strip()
@@ -90,4 +90,4 @@ for user in users_list:
 
 # todo: Realizar os comentários com as marcações nas publicações
 for users_to_comments in new_users_list:
-    pass    
+    pass
