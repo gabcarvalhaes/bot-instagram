@@ -110,19 +110,24 @@ time.sleep(2)
 browser.get(url)
 
 time.sleep(2)
-Printer.primary('Aguarde... buscando campo de comentário')
+Printer.primary('Iniciando operação... aguarde')
 
-comments_list = [
-    '@m_esteves20 @brianathayde Teste do Bot',
-    '@alexandrel01 @_gabrielcarvalhaes Teste do Bot'
-]
-
+index = 0
 # * Realiza os comentários com as marcações nas publicações
-for comment in comments_list:
+while index < len(comments_list):
+    time.sleep(2)
     comment_field = browser.find_element_by_class_name('Ypffh')
-    comment_field.send_keys(comment)
+    comment_field.send_keys(comments_list[index])
 
     time.sleep(2)
 
     publicate_button = browser.find_element_by_xpath('//button[@type="submit"]')
     publicate_button.submit()
+
+    time.sleep(2)
+    index += 1
+else:
+    Printer.primary('Finalizando operação')
+
+    time.sleep(3)
+    sys.exit()
