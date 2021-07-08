@@ -30,11 +30,11 @@ class Bot:
         self.user = User(username, password)
 
     # * Filtra os usuários e os retorna dentro de uma nova lista
-    def filter_users(self, users_list: NodeIterator[Profile]) -> list:
+    def filter_users(self, users_list: NodeIterator[Profile], profile_page: str) -> list:
         new_users_list = []
 
         for user in users_list:
-            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile and user.is_verified != True:
+            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True:
                 new_users_list.append('@' + user.username)
         
         return new_users_list
@@ -43,7 +43,7 @@ class Bot:
         self.credentials()        
 
         # * Informações para a operação
-        profile = str(input('Perfil do sorteador: '))
+        profile_page = str(input('Perfil do sorteador: '))
         url = str(input('Página do sorteio: '))
         person_numbers = int(input('Número de pessoas a marcar por comentário: '))
         comment = str(input('Comentário: '))
@@ -103,7 +103,7 @@ class Bot:
         pass_button.click()
 
         # * Lista de usuários tratados
-        users_list = self.filter_users(insta_api.get_followees())
+        users_list = self.filter_users(insta_api.get_followees(), profile_page)
 
         index = 0
         index2 = 0
@@ -112,8 +112,6 @@ class Bot:
 
         # * Filtra e adiciona os usuários corretamente nesses arrays
         while index < int(len(users_list) / person_numbers):
-            user = users_list[index]
-
             while index2 < person_numbers:                
                 comments_list[index] += users_list[index3 + index2] + ' '
 
@@ -142,13 +140,14 @@ class Bot:
             comment_field = browser.find_element_by_class_name('Ypffh')
             comment_field.send_keys(comments_list[index])
 
-            time.sleep(2)
+            time.sleep(5)
 
             publicate_button = browser.find_element_by_xpath('//button[@type="submit"]')
             publicate_button.submit()
 
-            time.sleep(5)
             index += 1
+            
+            time.sleep(5)
         else:
             Printer.primary('Finalizando operação')
 
