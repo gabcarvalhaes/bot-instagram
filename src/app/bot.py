@@ -17,6 +17,11 @@ from src.app.user import User
 class Bot:
     INSTAGRAM_URL = 'https://www.instagram.com' # * Url padrão do Instagram
     EDGE_DRIVER = '/src/drivers/msedgedriver.exe' # * Driver do Microsoft Edge
+    EXCLUDE_LIST = [
+        'ligacidadejardimfs',
+        'peladaacj',
+        'fozoco'
+    ]
 
     def __init__(self) -> None:
         colorama.init()
@@ -35,7 +40,7 @@ class Bot:
         new_users_list = []
 
         for user in users_list:
-            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True:
+            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True and user.username not in self.EXCLUDE_LIST:
                 new_users_list.append('@' + user.username)
         
         return new_users_list
@@ -130,29 +135,27 @@ class Bot:
 
         browser.get(url)
 
-        time.sleep(2)
+        time.sleep(4)
         Printer.primary('Iniciando operação... aguarde')
 
         index = 0
-        
-        # * Realiza os comentários com as marcações nas publicações
-        while index < len(comments_list):         
-            time.sleep(2)   
-            comment_field = browser.find_element_by_class_name('Ypffh')
-            comment_field.click()
-            time.sleep(random.randint(2, 5))
 
+        # * Realiza os comentários com as marcações nas publicações
+        while index < len(comments_list):    
+            browser.find_element_by_class_name('Ypffh').click()
+            comment_field = browser.find_element_by_class_name('Ypffh')
             comment = comments_list[index]
 
             Printer.primary(comment)
-
+                
             for letter in comment:
                 comment_field.send_keys(letter)
+                time.sleep(random.randint(1, 5) / 30)
 
             time.sleep(random.randint(30, 150))
 
             publicate_button = browser.find_element_by_xpath('//button[@type="submit"]')
-            publicate_button.submit()
+            publicate_button.click()
 
             index += 1
             Printer.primary('Próximo...')
