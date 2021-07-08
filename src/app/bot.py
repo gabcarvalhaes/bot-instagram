@@ -2,6 +2,7 @@ import time
 import os
 import sys
 import colorama
+import random
 
 from getpass import getpass
 from selenium import webdriver
@@ -135,17 +136,26 @@ class Bot:
         index = 0
         
         # * Realiza os comentários com as marcações nas publicações
-        while index < len(comments_list):
-            time.sleep(2)
+        while index < len(comments_list):         
+            time.sleep(2)   
             comment_field = browser.find_element_by_class_name('Ypffh')
-            comment_field.send_keys(comments_list[index])
+            comment_field.click()
+            time.sleep(random.randint(2, 5))
 
-            time.sleep(5)
+            comment = comments_list[index]
+
+            Printer.primary(comment)
+
+            for letter in comment:
+                comment_field.send_keys(letter)
+
+            time.sleep(random.randint(30, 150))
 
             publicate_button = browser.find_element_by_xpath('//button[@type="submit"]')
             publicate_button.submit()
 
             index += 1
+            Printer.primary('Próximo...')
             
             time.sleep(5)
         else:
