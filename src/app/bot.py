@@ -146,7 +146,7 @@ class Bot:
             comment_field = browser.find_element_by_class_name('Ypffh')
             comment = comments_list[index]
 
-            Printer.primary(comment)
+            Printer.primary(comment + ' -> ' + index)
                 
             for letter in comment:
                 comment_field.send_keys(letter)
