@@ -18,6 +18,9 @@ class Bot:
     INSTAGRAM_URL = 'https://www.instagram.com' # * Url padrão do Instagram
     EDGE_DRIVER = '/src/drivers/msedgedriver.exe' # * Driver do Microsoft Edge
     
+    exclude_list = []
+    with open('exclude_list.txt', 'r') as f:
+        exclude_list = [line.strip() for line in f]   
 
     def __init__(self) -> None:
         colorama.init()
@@ -36,7 +39,7 @@ class Bot:
         new_users_list = []
 
         for user in users_list:
-            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True:
+            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True and user.username not in self.exclude_list:
                 new_users_list.append('@' + user.username)
         
         return new_users_list
