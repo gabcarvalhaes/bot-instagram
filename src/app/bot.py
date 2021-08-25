@@ -17,11 +17,7 @@ from src.app.user import User
 class Bot:
     INSTAGRAM_URL = 'https://www.instagram.com' # * Url padrão do Instagram
     EDGE_DRIVER = '/src/drivers/msedgedriver.exe' # * Driver do Microsoft Edge
-    EXCLUDE_LIST = [
-        'ligacidadejardimfs',
-        'peladaacj',
-        'fozoco'
-    ]
+    
 
     def __init__(self) -> None:
         colorama.init()
