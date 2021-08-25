@@ -36,7 +36,7 @@ class Bot:
         new_users_list = []
 
         for user in users_list:
-            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True and user.username not in self.EXCLUDE_LIST:
+            if 'dix' not in user.username and 'oficial' not in user.username and 'official' not in user.username and user.username != profile_page and user.is_verified != True:
                 new_users_list.append('@' + user.username)
         
         return new_users_list
